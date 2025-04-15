@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ECharts 实例集合</title>
+    <!-- 引入 echarts.js -->
+    <!-- <script src="https://cdn.staticfile.net/echarts/4.3.0/echarts.min.js"></script> -->
+     <script src="./theme/echarts.min.js"></script>
+    <style>
+        body {
+            background-color: antiquewhite;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px;
+        }
+
+        .chart-box {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .chart {
+            width: 500px;
+            height: 350px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <h2>ECharts 图表示例集合</h2>
+    <div class="chart-container">
+        <!-- 线图示例 -->
+        <div class="chart-box">
+            <h3>1. 平滑曲线图</h3>
+            <div id="lineChart" class="chart"></div>
+        </div>
+
+        <!-- 柱状图示例 -->
+        <div class="chart-box">
+            <h3>2. 基础柱状图</h3>
+            <div id="barChart" class="chart"></div>
+        </div>
+
+        <!-- 饼图示例 -->
+        <div class="chart-box">
+            <h3>3. 基础饼图</h3>
+            <div id="pieChart" class="chart"></div>
+        </div>
+
+        <!-- 散点图示例 -->
+        <div class="chart-box">
+            <h3>4. 基础散点图</h3>
+            <div id="scatterChart" class="chart"></div>
+        </div>
+    </div>
+
+    <script src="./theme/shine.js"></script>
+    <script src="./theme/vintage.js"></script>
+    <script src="./theme/dark.js"></script>
+    <script type="text/javascript">
+        // 1. 平滑曲线图 (不是简单折线图)
+        // 初始化线图，找到HTML中id为'lineChart'的元素作为容器
+        const lineChart = echarts.init(document.getElementById('lineChart'), 'shine'); // 使用shine主题
+
+        // 定义线图的配置项，这是一个包含各种设置的对象
+        const lineOption = {
+            title: {
+                text: '一周销售数据' // 设置图表的标题文字
+            },
+            tooltip: {
+                trigger: 'axis', // 设置提示框触发方式：鼠标移到坐标轴上时显示提示框
+                // showDelay: 200,
+                // transitionDuration : 0.4
+                // axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                //     type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+                //     lineStyle: { // 直线指示器样式设置
+                //         color: '#48b',
+                //         width: 2,
+                //         type: 'solid'
+                //     },
+                //     shadowStyle: { // 阴影指示器样式设置
+                //         width: 'auto', // 阴影大小
+                //         color: 'rgba(150,150,150,0.3)' // 阴影颜色
+                //     }
+                // },
+            },
+            legend: {
+                orient: 'horizontal',
+                data: ['销售额1'] // 设置图例，就是图表上方显示"销售额"的小标识和文字
+            },
+            xAxis: {
+                type: 'category', // 设置x轴类型为类目轴，适合显示周一到周日这种分类数据
+                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'] // 设置x轴上要显示的文字
+            },
+            yAxis: {
+                type: 'value', // 设置y轴类型为数值轴，用于显示销售额的具体数值
+                name: '销售额1(元)' // 设置y轴的名称，说明单位是"元"
+            },
+            series: [{ // series是系列列表，代表要在图表中显示的一组数据
+                name: '销售额1', // 这组数据的名称，会显示在图例和提示框中
+                data: [150, 230, 224, 218, 135, 147, 260], // 七天的具体销售额数据
+                type: 'line', // 指定这组数据用线图表示
+                smooth: true, // 开启平滑曲线效果，使线条更加圆滑美观
+                markPoint: { // 设置标记点，在特定数据上显示标记
+                    data: [{
+                            type: 'max',
+                            name: '最大值'
+                        }, // 自动找出最大值并标记
+                        {
+                            type: 'min',
+                            name: '最小值'
+                        } // 自动找出最小值并标记
+                    ]
+                }
+            }]
+        };
+        // 使用刚刚定义的配置项设置图表，让图表显示出来
+        lineChart.setOption(lineOption);
+
+        // 2. 基础柱状图
+        // 初始化柱状图，找到HTML中id为'barChart'的元素作为容器
+        const barChart = echarts.init(document.getElementById('barChart'), 'vintage'); // 使用vintage主题
+
+        // 定义柱状图的配置项
+        const barOption = {
+            title: {
+                text: '各部门人员数量' // 设置图表标题
+            },
+            tooltip: {
+                trigger: 'item' // 设置提示框触发方式：鼠标移到柱子上时显示提示框
+            },
+            xAxis: {
+                type: 'category', // 设置x轴为类目轴，用于显示各个部门名称
+                data: ['市场部', '技术部', '销售部', '客服部', '财务部'] // 设置x轴上显示的部门名称
+            },
+            yAxis: {
+                type: 'value', // 设置y轴为数值轴，用于显示人数
+                name: '人数' // 设置y轴的名称为"人数"
+            },
+            series: [{ // 系列列表
+                name: '部门人数', // 这组数据的名称
+                data: [25, 45, 30, 20, 15], // 各部门的具体人数数据
+                type: 'bar', // 指定这组数据用柱状图表示
+                label: { // 设置数据标签，也就是显示在柱子上的数字
+                    show: true, // 显示数据标签
+                    position: 'top' // 数据标签显示在柱子顶部
+                },
+                itemStyle: { // 设置柱子的样式
+                    color: function (params) { // 使用函数来决定每个柱子的颜色
+                        // 定义一个颜色列表，包含5种不同的颜色
+                        const colorList = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae'];
+                        // 根据数据的索引(0,1,2,3,4)返回对应的颜色，让每个柱子颜色不同
+                        return colorList[params.dataIndex];
+                    }
+                }
+            }]
+        };
+        // 使用配置项设置柱状图
+        barChart.setOption(barOption);
+
+        // 3. 基础饼图
+        // 初始化饼图，找到HTML中id为'pieChart'的元素作为容器
+        const pieChart = echarts.init(document.getElementById('pieChart'), 'dark');
+
+        // 定义饼图的配置项
+        const pieOption = {
+            title: {
+                text: '网站访问来源', // 设置图表标题
+                left: 'center' // 标题位置居中
+            },
+            tooltip: {
+                trigger: 'item', // 设置提示框触发方式：鼠标移到饼图上时显示提示框
+                formatter: '{a} <br/>{b}: {c} ({d}%)' // 自定义提示框内容格式：系列名<br/>数据名称: 数值 (百分比%)
+            },
+            legend: { // 图例设置
+                orient: 'vertical', // 图例垂直排列
+                left: 'left', // 图例位置在左侧
+                // 图例中显示的数据项名称
+                data: ['直接访问', '搜索引擎', '邮件营销', '社交媒体', '视频广告']
+            },
+            series: [{ // 系列列表
+                name: '访问来源', // 系列名称
+                type: 'pie', // 指定图表类型为饼图
+                radius: '60%', // 饼图的半径，为容器宽度的60%
+                center: ['50%', '50%'], // 饼图的中心位置，放在容器的正中间
+                // 饼图的数据，每一项包含value(值)和name(名称)
+                data: [{
+                        value: 335,
+                        name: '直接访问'
+                    }, // 数值335，名称"直接访问"
+                    {
+                        value: 450,
+                        name: '搜索引擎'
+                    },
+                    {
+                        value: 120,
+                        name: '邮件营销'
+                    },
+                    {
+                        value: 180,
+                        name: '社交媒体'
+                    },
+                    {
+                        value: 90,
+                        name: '视频广告'
+                    }
+                ],
+                emphasis: { // 鼠标悬停时的高亮效果设置
+                    itemStyle: { // 数据项样式
+                        shadowBlur: 10, // 阴影模糊大小
+                        shadowOffsetX: 0, // 阴影水平偏移
+                        shadowColor: 'rgba(0, 0, 0, 0.5)' // 阴影颜色，半透明的黑色
+                    }
+                }
+            }]
+        };
+        // 使用配置项设置饼图
+        pieChart.setOption(pieOption);
+
+        // 4. 基础散点图
+        // 初始化散点图，找到HTML中id为'scatterChart'的元素作为容器
+        const scatterChart = echarts.init(document.getElementById('scatterChart'));
+
+        // 定义散点图的配置项
+        const scatterOption = {
+            title: {
+                text: '身高体重分布' // 设置图表标题
+            },
+            tooltip: {
+                trigger: 'item', // 设置提示框触发方式：鼠标移到数据点上时显示提示框
+                formatter: function (params) { // 自定义提示框内容格式的函数
+                    // params.value是一个数组[身高, 体重]
+                    // 返回格式化的文本："身高: XXXcm<br/>体重: XXXkg"
+                    return '身高: ' + params.value[0] + 'cm<br/>体重: ' + params.value[1] + 'kg';
+                }
+            },
+            xAxis: { // x轴设置
+                type: 'value', // 数值轴类型
+                name: '身高(cm)', // x轴名称
+                min: 150, // x轴最小值
+                max: 190 // x轴最大值
+            },
+            yAxis: { // y轴设置
+                type: 'value', // 数值轴类型
+                name: '体重(kg)', // y轴名称
+                min: 40, // y轴最小值
+                max: 90 // y轴最大值
+            },
+            series: [{ // 系列列表
+                name: '数据点', // 系列名称
+                type: 'scatter', // 指定图表类型为散点图
+                // 散点图的数据，每一项是一个[x,y]数组，表示一个人的[身高,体重]
+                data: [
+                    [165, 55],
+                    [172, 65],
+                    [178, 70],
+                    [160, 50],
+                    [155, 45],
+                    [170, 60],
+                    [182, 80],
+                    [175, 68],
+                    [168, 58],
+                    [185, 85],
+                    [163, 52],
+                    [180, 75]
+                ],
+                symbolSize: 15, // 散点的大小，单位是像素
+                itemStyle: { // 散点的样式设置
+                    color: function (params) { // 自定义散点颜色的函数
+                        // 如果体重大于70，颜色为红色，否则为蓝绿色
+                        return params.value[1] > 70 ? '#c23531' : '#61a0a8';
+                    },
+                    opacity: 0.8 // 透明度设置，值为0.8表示80%不透明
+                }
+            }]
+        };
+        // 使用配置项设置散点图
+        scatterChart.setOption(scatterOption);
+
+        // 添加窗口大小变化的事件监听器
+        // 当浏览器窗口大小改变时，自动调整所有图表的大小以适应新窗口
+        window.addEventListener('resize', function () {
+            lineChart.resize(); // 调整线图大小
+            barChart.resize(); // 调整柱状图大小
+            pieChart.resize(); // 调整饼图大小
+            scatterChart.resize(); // 调整散点图大小
+        });
+    </script>
+</body>
+
+</html>
